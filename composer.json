@@ -1,0 +1,33 @@
+{
+    "name": "myzx/php-helper",
+    "description": "PHP项目日常开发基础库",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Myzx\\PhpHelper\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "zhongxiaochuan"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.3|^8.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "nesbot/carbon":"^2.0",
+        "ext-xml": "*",
+        "ext-libxml": "*",
+        "ext-json": "*",
+        "ext-simplexml": "*",
+        "ext-openssl": "*",
+        "ext-bcmath": "*",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "xin/filesystem":"^3.0",
+        "overtrue/wechat":"~4.0"
+    }
+}
