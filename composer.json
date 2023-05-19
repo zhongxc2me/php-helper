@@ -2,7 +2,7 @@
     "name": "myzx/php-helper",
     "description": "PHP项目日常开发基础库",
     "type": "library",
-    "license":"Apache-2.0",
+    "license":"MIT",
     "autoload": {
         "psr-4": {
             "Myzx\\PhpHelper\\": "src/"
