@@ -6,3 +6,10 @@ PHP项目开发日常必备基础库，它包含了基础常用的工具库（�
 ### 安装教程
 composer require myzx/php-helper
 
+### Http
+```php
+$url = "http://xxx.myzx.cn";
+// Get请求
+$data = Client::instance()->get($url, []);
+$data->json();
+```
