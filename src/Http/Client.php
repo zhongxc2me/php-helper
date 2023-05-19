@@ -102,11 +102,11 @@ class Client
     /**
      * 动态方法
      *
-     * @param $name
-     * @param $arguments
+     * @param string $name
+     * @param array $arguments
      * @return mixed
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments)
     {
         array_unshift($arguments, $name);
         return call_user_func_array([$this, 'request'], $arguments);
@@ -119,7 +119,7 @@ class Client
      * @param array $arguments
      * @return false|mixed
      */
-    public static function __callStatic($name, $arguments)
+    public static function __callStatic(string $name, array $arguments)
     {
         return call_user_func_array([static::instance(), $name], $arguments);
     }
