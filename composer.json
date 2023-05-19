@@ -10,7 +10,8 @@
     },
     "authors": [
         {
-            "name": "zhongxiaochuan"
+            "name": "zhongxiaochuan",
+            "email": "zhongxc2me@outlook.com"
         }
     ],
     "minimum-stability": "dev",
