@@ -7,6 +7,12 @@ use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * Class Client
+ * @method Response get($url, $data = null, $options = [])
+ * @method Response post($url, $data = null, $options = [])
+ * @method Response postJSON($url, $data = null, $options = [])
+ * @method Response put($url, $data = null, $options = [])
+ * @method Response delete($url, $data = null, $options = [])
+ * @method Response upload($url, $data = null, $options = [])
  */
 class Client
 {
@@ -91,5 +97,30 @@ class Client
             ]);
         }
         return self::$instance;
+    }
+
+    /**
+     * 动态方法
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        array_unshift($arguments, $name);
+        return call_user_func_array([$this, 'request'], $arguments);
+    }
+
+    /**
+     * 静态调用动态方法
+     *
+     * @param string $name
+     * @param array $arguments
+     * @return false|mixed
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        return call_user_func_array([static::instance(), $name], $arguments);
     }
 }
