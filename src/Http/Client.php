@@ -70,4 +70,26 @@ class Client
         }
         return new Response($response);
     }
+
+    /**
+     * 获取默认实例
+     * @return Client|null
+     */
+    public static function instance(): ?Client
+    {
+        if (static::$instance===null) {
+            self::$instance = new static([
+                'timeout' => 30,
+                'connect_timeout' => 5,
+                'allow_redirects' => [
+                    'max' => 5,
+                    'strict' => false,
+                    'referer' => true,
+                    'protocols' => ['http', 'https'],
+                    'track_redirects' => false,
+                ],
+            ]);
+        }
+        return self::$instance;
+    }
 }
