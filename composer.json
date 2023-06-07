@@ -25,11 +25,17 @@
         "ext-simplexml": "*",
         "ext-openssl": "*",
         "ext-bcmath": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "mongodb/mongodb": "1.12.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
         "xin/filesystem":"^3.0",
         "overtrue/wechat":"~4.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "easywechat-composer/easywechat-composer": true
+        }
     }
 }
