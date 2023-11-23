@@ -216,3 +216,65 @@ if (!function_exists('now')) {
         return Carbon::now($tz);
     }
 }
+
+if (!function_exists('phoneHide')) {
+    /**
+     * 手机号脱敏
+     * @param $phone
+     * @return string
+     */
+    function phoneHide($phone): string
+    {
+        if (empty($phone)) {
+            return '';
+        }
+        return substr_replace($phone, '****', 3, -4);
+    }
+}
+
+if (!function_exists('idcardHide')) {
+    /**
+     * 身份证号脱敏
+     * @param $idcard
+     * @return string
+     */
+    function idcardHide($idcard): string
+    {
+        if (empty($idcard)) {
+            return '';
+        }
+
+        $idcardLen = strlen($idcard);
+        if ($idcardLen == 18) { // 按照身份证号码脱敏
+            return substr_replace($idcard, '***********', 3, -4);
+        } else { // 其他证件脱敏
+            return substr_replace($idcard, str_pad('*', $idcardLen - 2, '*'), 1, -1);
+        }
+    }
+}
+
+if (!function_exists('getGenderByIdcard')) {
+    /**
+     * 通过身份证号，获取就诊人性别
+     * @param $idcard
+     * @return int
+     */
+    function getGenderByIdcard($idcard): int
+    {
+        //0-未知； 1-男； 2-女；
+        if (empty($idcard) || strlen($idcard) != 18) {
+            return 0;
+        }
+        $id = strtoupper($idcard);
+        $regx = "/(^\d{17}([0-9]|X)$)/";
+        if (!preg_match($regx, $id)) {
+            return 0;
+        }
+
+        $div = substr($idcard, -2, 1) % 2;
+        if ($div == 0) {//奇数为男，偶数为女
+            return 2;//女
+        }
+        return 1;//男
+    }
+}

@@ -31,5 +31,10 @@
         "phpunit/phpunit": "^9.0",
         "xin/filesystem":"^3.0",
         "overtrue/wechat":"~4.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "easywechat-composer/easywechat-composer": true
+        }
     }
 }
