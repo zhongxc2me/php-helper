@@ -25,7 +25,8 @@
         "ext-simplexml": "*",
         "ext-openssl": "*",
         "ext-bcmath": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
