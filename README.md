@@ -8,7 +8,7 @@ composer require myzx/php-helper
 
 ### Http
 ```php
-$url = "http://xxx.myzx.cn";
+$url = "https://xxx.myzx.cn";
 // Get请求
 $data = Client::instance()->get($url, []);
 $data->json();
