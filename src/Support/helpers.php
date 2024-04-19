@@ -216,3 +216,126 @@ if (!function_exists('now')) {
         return Carbon::now($tz);
     }
 }
+
+if (!function_exists('phoneHide')) {
+    /**
+     * 手机号脱敏
+     * @param $phone
+     * @return string
+     */
+    function phoneHide($phone): string
+    {
+        if (empty($phone)) {
+            return '';
+        }
+        return substr_replace($phone, '****', 3, -4);
+    }
+}
+
+if (!function_exists('idcardHide')) {
+    /**
+     * 身份证号脱敏
+     * @param $idcard
+     * @return string
+     */
+    function idcardHide($idcard): string
+    {
+        if (empty($idcard)) {
+            return '';
+        }
+
+        $idcardLen = strlen($idcard);
+        if ($idcardLen == 18) { // 按照身份证号码脱敏
+            return substr_replace($idcard, '***********', 3, -4);
+        } else { // 其他证件脱敏
+            return substr_replace($idcard, str_pad('*', $idcardLen - 2, '*'), 1, -1);
+        }
+    }
+}
+
+if (!function_exists('getGenderByIdcard')) {
+    /**
+     * 通过身份证号，获取就诊人性别
+     * @param $idcard
+     * @return int
+     */
+    function getGenderByIdcard($idcard): int
+    {
+        //0-未知； 1-男； 2-女；
+        if (empty($idcard) || strlen($idcard) != 18) {
+            return 0;
+        }
+        $id = strtoupper($idcard);
+        $regx = "/(^\d{17}([0-9]|X)$)/";
+        if (!preg_match($regx, $id)) {
+            return 0;
+        }
+
+        $div = substr($idcard, -2, 1) % 2;
+        if ($div == 0) {//奇数为男，偶数为女
+            return 2;//女
+        }
+        return 1;//男
+    }
+}
+
+if (!function_exists('analysisIdcard')) {
+    /**
+     * 解析身份证号
+     * @param string $idcard 身份证号
+     * @return array
+     */
+    function analysisIdcard(string $idcard): array
+    {
+        $result = [
+            'valid' => false,
+            'age' => '',
+            'month' => '',
+            'sex' => '',
+            'sex_desc' => '',
+            'birthday' => '',
+            'msg' => '',
+        ];
+        $id = strtoupper($idcard);
+        $regx = "/(^\d{17}([0-9]|X)$)/";
+        $arr_split = array();
+        if (!preg_match($regx, $id)) {
+            $result['msg'] = '身份证号码格式不正确';
+            return $result;
+        }
+
+        $regx = "/^(\d{6})+(\d{4})+(\d{2})+(\d{2})+(\d{3})([0-9]|X)$/";
+        @preg_match($regx, $id, $arr_split);
+        $dtm_birth = $arr_split[2] . '/' . $arr_split[3] . '/' . $arr_split[4];
+        if (!strtotime($dtm_birth)) { //检查生日日期是否正确
+            $result['msg'] = '身份证号码出生日期不正确';
+            return $result;
+        }
+        $obj = Carbon::createFromDate($arr_split[2] . '-' . $arr_split[3] . '-' . $arr_split[4]);
+        //检验18位身份证的校验码是否正确。
+        //校验位按照ISO 7064:1983.MOD 11-2的规定生成，X可以认为是数字10。
+        $arr_int = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+        $arr_ch = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'];
+        $sign = 0;
+        for ($i = 0; $i < 17; $i++) {
+            $b = (int)$id[$i];
+            $w = $arr_int[$i];
+            $sign += $b * $w;
+        }
+        $n = $sign % 11;
+        $val_num = $arr_ch[$n];
+        if ($val_num != substr($id, 17, 1)) {
+            $result['msg'] = '身份证号码不正确';
+            return $result;
+        }
+
+        $result['valid'] = true;
+        $result['age'] = $obj->age;
+        $result['month'] = $obj->diffInMonths();
+        $result['birthday'] = $obj->toDateString();
+        $result['sex'] = ((int)substr($id, -2, 1) % 2) == 1 ? 1 : 2; // 1男、2女
+        $result['sex_desc'] = $result['sex'] == 1 ? '男' : '女';
+
+        return $result;
+    }
+}
